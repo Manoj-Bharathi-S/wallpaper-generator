@@ -32,8 +32,6 @@ def generate_progress_image(
     img = Image.new('RGB', (width, height), color=BG_COLOR)
     draw = ImageDraw.Draw(img)
     
-    # Use bundled font for reliable rendering on Vercel/Render
-    font_path = os.path.join(os.path.dirname(__file__), "font.ttf")
     try:
         font_large = ImageFont.truetype(font_path, 48)
         font_small = ImageFont.truetype(font_path, 36)
