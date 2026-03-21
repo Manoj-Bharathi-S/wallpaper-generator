@@ -1,5 +1,6 @@
 from PIL import Image, ImageDraw, ImageFont
 import math
+import os
 from datetime import date
 import io
 
@@ -31,9 +32,11 @@ def generate_progress_image(
     img = Image.new('RGB', (width, height), color=BG_COLOR)
     draw = ImageDraw.Draw(img)
     
+    # Use bundled font for reliable rendering on Vercel/Render
+    font_path = os.path.join(os.path.dirname(__file__), "font.ttf")
     try:
-        font_large = ImageFont.truetype("arial.ttf", 48)
-        font_small = ImageFont.truetype("arial.ttf", 36)
+        font_large = ImageFont.truetype(font_path, 48)
+        font_small = ImageFont.truetype(font_path, 36)
     except IOError:
         font_large = ImageFont.load_default()
         font_small = ImageFont.load_default()
