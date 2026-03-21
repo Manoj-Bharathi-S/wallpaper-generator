@@ -12,7 +12,7 @@ def generate_progress_image(
     height: int,
     fill_color: str = "#ff6b35"
 ) -> bytes:
-    BG_COLOR = "#1a1a1a"
+    BG_COLOR = "#000000"
     DOT_UNPASSED_COLOR = "#4a4a4a"
     DOT_PASSED_COLOR = fill_color
     TEXT_COLOR_PRIMARY = "#a0a0a0"

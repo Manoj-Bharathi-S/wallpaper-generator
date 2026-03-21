@@ -35,5 +35,8 @@ async def goal_image(
         height=height,
         fill_color=fill_color
     )
-    
     return Response(content=img_bytes, media_type="image/png")
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
