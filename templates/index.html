@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Wallpaper Generator</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #1a1a1a; color: white; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; color: #a0a0a0; }
+        input[type="text"], input[type="date"], input[type="number"] {
+            width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #4a4a4a;
+            background: #2a2a2a; color: white; box-sizing: border-box;
+        }
+        button {
+            padding: 10px 15px; background: #ff6b35; color: white; border: none; border-radius: 4px; cursor: pointer;
+        }
+        button:hover { background: #e05a2b; }
+        #preview { margin-top: 20px; text-align: center; }
+        #preview img { max-width: 100%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.5); }
+        .color-preset { width: 30px; height: 30px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; padding: 0; }
+        .color-preset:hover { border-color: white; transform: scale(1.1); transition: 0.2s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Generate Progress Wallpaper</h2>
+        <form id="goalForm">
+            <div class="form-group">
+                <label>Goal Name (e.g., SDE)</label>
+                <input type="text" id="goal" value="SDE" required>
+            </div>
+            <div class="form-group">
+                <label>Start Date</label>
+                <input type="date" id="start_date" value="2026-03-21" required>
+            </div>
+            <div class="form-group">
+                <label>Goal Date</label>
+                <input type="date" id="goal_date" value="2026-05-31" required>
+            </div>
+            <div class="form-group">
+                <label>Width</label>
+                <input type="number" id="width" value="1080" required>
+            </div>
+            <div class="form-group">
+                <label>Height</label>
+                <input type="number" id="height" value="2340" required>
+            </div>
+            <div class="form-group">
+                <label>Fill Color (Preset or Custom)</label>
+                <div style="display: flex; gap: 10px; margin-bottom: 5px;">
+                    <button type="button" class="color-preset" style="background:#ff6b35;" data-color="#ff6b35" title="Sunset Orange"></button>
+                    <button type="button" class="color-preset" style="background:#39ff14;" data-color="#39ff14" title="Neon Green"></button>
+                    <button type="button" class="color-preset" style="background:#00f0ff;" data-color="#00f0ff" title="Electric Blue"></button>
+                    <button type="button" class="color-preset" style="background:#ff007f;" data-color="#ff007f" title="Cyberpunk Pink"></button>
+                    <button type="button" class="color-preset" style="background:#ffd700;" data-color="#ffd700" title="Golden Yellow"></button>
+                    <button type="button" class="color-preset" style="background:#b57edc;" data-color="#b57edc" title="Lavender Purple"></button>
+                </div>
+                <input type="color" id="fill_color" value="#ff6b35" style="padding: 0; height: 40px; cursor: pointer;">
+            </div>
+            <button type="submit" id="generateBtn">Generate</button>
+        </form>
+        <div id="preview">
+            <h3>Preview (scaled down)</h3>
+            <p id="loading" style="display:none; color:#a0a0a0;">Generating...</p>
+            <img id="wallpaper" style="display:none;">
+            <p style="margin-top:10px;"><a id="downloadLink" href="#" download="wallpaper.png" style="display:none; color:#ff6b35;">Download Image</a></p>
+        </div>
+    </div>
+    
+    <script>
+        document.querySelectorAll('.color-preset').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.getElementById('fill_color').value = this.dataset.color;
+            });
+        });
+
+        document.getElementById('goalForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const goal = document.getElementById('goal').value;
+            const startDate = document.getElementById('start_date').value;
+            const goalDate = document.getElementById('goal_date').value;
+            const width = document.getElementById('width').value;
+            const height = document.getElementById('height').value;
+            const fillColor = document.getElementById('fill_color').value;
+            
+            const params = new URLSearchParams({
+                goal: goal,
+                start_date: startDate,
+                goal_date: goalDate,
+                width: width,
+                height: height,
+                fill_color: fillColor
+            });
+            
+            const url = `/goal?${params.toString()}`;
+            
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('wallpaper').style.display = 'none';
+            document.getElementById('downloadLink').style.display = 'none';
+            
+            const img = new Image();
+            img.onload = function() {
+                document.getElementById('loading').style.display = 'none';
+                const wallpaperImg = document.getElementById('wallpaper');
+                wallpaperImg.src = url;
+                wallpaperImg.style.display = 'inline-block';
+                
+                const link = document.getElementById('downloadLink');
+                link.href = url;
+                link.style.display = 'inline-block';
+            };
+            img.src = url;
+        });
+    </script>
+</body>
+</html>
